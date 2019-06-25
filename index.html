@@ -1,0 +1,40 @@
+
+<script src="http://pajhome.org.uk/crypt/md5/2.2/md5-min.js"></script>
+<script type="text/javascript">
+  let cadena = "1ee7b2c95024bf2a3a5b645676875f72af97c725eca5ea2e7ae4a6b18dd9f608aaf180b66f6282f65168c30c1c5e54660aaa8fb0c5b4fa52c0d06ed55d02fcc95e35b5a6a854db008cb8a677dfff030b35306f43e19f6826a5df7937e71d228cb2917b47913c83618903a4e56482283634e4cf70388e9477677aa3013494ba1c3d116007775d60a0d5781d2e35d747b5dece2e0e3d79d272e40c8c66555f5525";
+  let abecedario = "abcdefghijklmnopqrstuvwxyz1234567890.@";
+  let j = 0;
+  let subcadenas = [''];
+  let correo = '';
+
+  // Primero separo la cadena en subcadenas de 32 caracteres (pues md5 da como resultado una cadena de longitud 32)
+   for (let i = 0; i < cadena.length; i++) {
+
+     if (i != 0 && i % 32 == 0) {
+         j++;
+         subcadenas[j] = cadena[i];
+     } else {
+         subcadenas[j] += cadena[i];
+     }
+
+     //  Ya que tengo las subcadenas ahora se compara con todas las combinaciones de mi arreglo alfanumérico
+     //  de dos caracteres encriptados de la siguiente manera md5(md5('ab') + 'ab' + md5('ab')) si son iguales
+     //  entonces concateno la subcadena a la variable correo.
+
+     if (i == cadena.length -1) {
+       subcadenas.forEach((subcadena) => {
+         for (caracter1 of abecedario) {
+           for (caracter2 of abecedario){
+             let aux = hex_md5(hex_md5(caracter1 + caracter2) + caracter1 + caracter2 + hex_md5(caracter1 + caracter2));
+             if (aux == subcadena) {
+               correo += caracter1 + caracter2;
+             }
+           }
+         }
+       });
+     }
+   }
+
+   console.log("El correo es: " + correo);
+
+</script>
